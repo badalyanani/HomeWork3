@@ -25,11 +25,11 @@ class Employee: CustomStringConvertible {
         self.name = name
         self.team = team
     }
-//    init(){
-//        name = ""
-//        gender = Gender.man
-//        team = Team(name: name, members: [Team.Prof.designer: [], Team.Prof.developer: [], Team.Prof.pm: []])
-//    }
+    //    init(){
+    //        name = ""
+    //        gender = Gender.man
+    //        team = Team(name: name, members: [Team.Prof.designer: [], Team.Prof.developer: [], Team.Prof.pm: []])
+    //    }
     
     var description: String {
         let str = "\(name) \(gender) \(team)"
@@ -38,7 +38,6 @@ class Employee: CustomStringConvertible {
     deinit {
         Employee.number -= 1
     }
-    
 }
 
 class Team {
@@ -52,7 +51,7 @@ class Team {
         self.name = name
         self.members = members
     }
-  
+    
     func addMember(member: Employee){
         
         switch member {
@@ -66,7 +65,7 @@ class Team {
             member.team = self
         case is Designer:
             if let _ = members[Prof.designer]{
-            members[.designer]?.append(member)
+                members[.designer]?.append(member)
                 member.team = self
                 break
             }
@@ -74,7 +73,7 @@ class Team {
             member.team = self
         case is ProductManager:
             if let _ = members[Prof.pm]{
-            members[.pm]?.append(member)
+                members[.pm]?.append(member)
                 member.team = self
                 break
             }
@@ -109,9 +108,16 @@ class Company {
         Company.number += 1
     }
     
-    func  register(employees: Employee, teams: Team) {
+    func  register(employees: Employee, teamsIndex: Int) {
         self.employees.append(employees)
-        teams.addMember(member: employees)
+        if(teamsIndex < companyPicsart.teams.count) {
+            companyPicsart.teams[teamsIndex].addMember(member: employees)
+        }
+        else {
+            companyPicsart.createTeam(naem: "Team2", members: [Team.Prof.designer: [], Team.Prof.developer: [], Team.Prof.pm: []])
+        }
+        
+      //  teams.addMember(member: employees)
         
     }
     
@@ -121,7 +127,7 @@ class Company {
     
     deinit {
         Company.number -= 1
-
+        
     }
 }
 
@@ -149,7 +155,7 @@ class Developer: Employee {
     func develop(project: String) {
         
     }
-   override var description: String {
+    override var description: String {
         let str = "\(name) \(gender) \(team)"
         return str
     }
@@ -163,7 +169,7 @@ class Designer: Employee {
     override init(name: String, gender: Gender, team: Team?) {
         super.init(name: name, gender: gender, team: team)
     }
-   override var description: String {
+    override var description: String {
         let str = "\(name) \(gender) \(team)"
         return str
     }
@@ -179,67 +185,43 @@ class ProductManager: Employee {
     func manage(project: String) {
         
     }
-   override var description: String {
+    override var description: String {
         let teamName = team?.name ?? ""
         let str = "\(name) \(gender) \(teamName)"
         return str
     }
 }
 
-var team: Team! = Team(name: "Team1", members: [Team.Prof.designer: []])
+//var team: Team! = Team(name: "Team1", members: [Team.Prof.designer: []])
 
 
 //var employees = [Employee]()
 //var employee1 = Employee(name: "An", gender: Gender.women, team: team)
-//
-//var employee2 = Employee(name: "Ani", gender: Gender.man, team: team)
-//var employee3 = Employee(name: "Sam", gender: Gender.man, team: team, description: "")
-//
+
 //employees.append(employee1)
-//employees.append(employee2)
 
 
-//employees.append(employee3)
-//
-//for i in 0..<employees.count{
-//    print("\(employees[i].name)")
-//}
-
-//
-//var teams = [Team]()
-
-//var employeeNames = [String:[Employee]]()
-
-//employeeNames["Employ_1"] = employees
-//var team1 = Team()
-//var team2 = Team()
-//var team3 = Team()
-//teams.append(team1)
-//teams.append(team2)
-//teams.append(team3)
 
 var companyPicsart: Company! = Company(name: "PicsArt")
 companyPicsart.createTeam(naem: "Team1", members:[Team.Prof.designer: [], Team.Prof.developer: [], Team.Prof.pm: []])
 
 //print(companyPicsart.teams[0].name)
 
-companyPicsart.register(employees: Designer(name: "Anna", gender: .women, team: nil), teams: team)
-companyPicsart.register(employees: Developer(name: "Dav", gender: .man, team: nil, platform: .Web), teams: team)
+companyPicsart.register(employees: Designer(name: "Anna", gender: .women, team: nil), teamsIndex: 0)
+companyPicsart.register(employees: Developer(name: "Dav", gender: .man, team: nil, platform: .Web), teamsIndex:  0 /*companyPicsart.teams[0] */)
 
-//print(companyPicsart.teams[0].members)
+companyPicsart.register(employees: ProductManager(name: "Alex", gender: .man, team: nil), teamsIndex: 1)
+
+
 for emp in companyPicsart.employees {
     print(emp)
 }
-companyPicsart = nil
-team = nil
+//companyPicsart = nil
+
+print(companyPicsart.teams[1])
+//team = nil
 print(Company.number, Team.number, Employee.number)
 
+companyPicsart = nil
 
-
-//
-//var employee4 = Employee(name: "Karen", gender: Gender.man, team: team, description: "")
-//companyPicsart.employees.append(employee4)
-
-//for i in 0..<4{
-//    print("\(companyPicsart.employees[i].gender)")
-//}
+print(Company.number, Team.number, Employee.number)
